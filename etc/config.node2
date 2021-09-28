@@ -1,0 +1,22 @@
+thread = 8    -- 开启的线程数
+cpath = "./skynet/cservice/?.so"    -- 用c编写的服务模块的路径
+bootstrap = "snlua bootstrap"       -- 启动的第一个服务
+
+--bootstrap配置
+start = "main"                      -- 主服务
+harbor=0                            -- 不使用主从节点模式
+
+-- lua配置
+
+lualoader = "./skynet/lualib/loader.lua"
+luaservice = "./service/?.lua;".."./service/?/init.lua;".."./skynet/service/?.lua;"
+
+lua_path = "./etc/?.lua;".."./lualib/?.lua;".."./skynet/lualib/?.lua;".."./skynet/lualib/?/init.lua;"
+lua_cpath="./luaclib/?.so;".."./skynet/luaclib/?.so"
+
+-- 后台模式
+--daemon = "./skynet.pid"
+--logger = "./userlog"
+
+-- 当前节点
+node = "node2"
