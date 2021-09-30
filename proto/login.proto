@@ -1,0 +1,14 @@
+syntax = "proto3";
+package login;
+
+message Login{
+    string cmd=1;
+    string playerid = 2;
+    string password = 3;
+}
+
+message Resp{
+    string cmd = 1;
+    bool stat=2;
+    string reason=3;
+}
