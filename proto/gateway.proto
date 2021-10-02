@@ -1,14 +1,15 @@
+
 syntax = "proto3";
 package gateway;
 
-message Login{
+message login{
     string cmd=1;
     string playerid = 2;
     string password = 3;
 }
 
-message Resp{
+message resp{
     string cmd = 1;
-    bool stat=2;
+    int32 stat=2;
     string reason=3;
 }

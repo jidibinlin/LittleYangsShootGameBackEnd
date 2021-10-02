@@ -16,6 +16,7 @@ function traceback(error)
 end
 
 local dispatch = function (session,address,cmd,...)
+   skynet.error("received call",address,cmd)
    local fun = M.resp[cmd]
    if not fun then
       skynet.error(func..":"..cmd.." isNULL")
@@ -24,7 +25,6 @@ local dispatch = function (session,address,cmd,...)
    end
    local ret = table.pack(xpcall(fun,traceback,address,...))
    local isok = ret[1]
-
    if not isok then
       skynet.ret()
       return
@@ -32,8 +32,8 @@ local dispatch = function (session,address,cmd,...)
    skynet.retpack(table.unpack(ret,2))
 end
 
-
 function init()
+   skynet.error("init is called")
    skynet.dispatch("lua",dispatch)
    if M.init then
       M.init()
