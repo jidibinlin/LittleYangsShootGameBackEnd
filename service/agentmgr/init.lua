@@ -7,6 +7,8 @@ STATUS = {
    LOGOUT = 4,
 }
 
+local players = {}
+
 function mgrplayer()
    local m = {
       playerid = nil,
@@ -19,6 +21,7 @@ function mgrplayer()
 end
 
 s.resp.reqlogin = function(source,playerid,node,gate)
+   print("agent mgr reqlogin playerid",playerid)
    local mplayer = players[playerid]
 
    if mplayer and mplayer.status == STATUS.LOGOUT then
@@ -31,12 +34,13 @@ s.resp.reqlogin = function(source,playerid,node,gate)
       return false
    end
 
+   print("mplayer:",mplayer)
    if mplayer then
       local pNode = mplayer.node
       local pAgent = mplayer.agent
       local pGate = mplayer.gate
       mplayer.status = STATUS.LOGOUT
-      s.call(node,pNode,"kick")
+      s.call(node,pAgent,"kick")
       s.send(node,pAgent,"exit")
       s.send(node,pGate,"send",playerid,{"kick","顶替下线"})
       s.call(node,pGate,"kick",playerid)
@@ -51,8 +55,8 @@ s.resp.reqlogin = function(source,playerid,node,gate)
    players[playerid] = player
    local agent = s.call(node,"nodemgr","newservice","agent","agent",playerid)
    player.agent = agent
-   player.conn = mplayer.conn
    player.status = STATUS.GAME
+   skynet.error("init agent success")
    return true,agent
 end
 

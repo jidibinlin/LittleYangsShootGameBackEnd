@@ -41,8 +41,10 @@ function init()
 end
 
 function M.call(node,srv,...)
+   skynet.error("lualib service call called")
    local currNode = skynet.getenv("node")
    if node == currNode then
+      skynet.error("lualib service call called 47")
       return skynet.call(srv,"lua",...)
    else
       return cluster.call(node,srv,...)
@@ -50,6 +52,7 @@ function M.call(node,srv,...)
 end
 
 function M.send(node,srv,...)
+   skynet.error("lualib service send called")
    local currNode = skynet.getenv("node")
    if node == currNode then
       return skynet.send(srv,"lua",...)
@@ -60,7 +63,12 @@ end
 
 function M.start(name,id,...)
    M.name = name
-   M.id = tonumber(id)
+   if name~="agent" then
+      M.id = tonumber(id)
+   else
+      M.id = tostring(id)
+   end
+   --M.id = id
    skynet.start(init)
 end
 

@@ -1,11 +1,13 @@
 
-¹
-gateway.protogateway"Q
-login
-cmd (	Rcmd
-playerid (	Rplayerid
-password (	Rpassword"D
-resp
-cmd (	Rcmd
-stat (Rstat
-reason (	Rreasonbproto3
+Þ
+gateway.protogateway"a
+login
+id (Rid
+cmd (	Rcmd
+playerid (	Rplayerid
+password (	Rpassword"Y
+	loginResp
+id (Rid
+cmd (	Rcmd
+stat (Rstat
+reason (	Rreasonbproto3

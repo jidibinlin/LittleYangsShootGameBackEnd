@@ -1,0 +1,34 @@
+syntax = "proto3";
+package agent;
+message enterScene{
+    int32 id = 1;
+    string cmd = 2;
+    string playerid = 3;
+}
+
+message sureEnterScene{
+    int32 id = 1;
+    string cmd =2;
+    string stat = 3;
+    string reason=4;
+}
+
+message startGame{
+    int32 id = 1;
+    string cmd = 2;
+    // TODO: add person
+    repeated string players=3;
+}
+
+
+message frame{
+    int32 id=1;
+    string cmd = 2;
+}
+
+message resp{
+    int32 id = 1;
+    string cmd = 2;
+    int32 stat=3;
+    string reason=4;
+}

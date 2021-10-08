@@ -27,11 +27,16 @@ skynet.start(function ()
 
       local agentNode = serviceConfig.agentmgr.node
       if currNode == agentNode then
-            local service = skynet.newservice("agentmgr","agentmgr",0)
-            skynet.name("agentmgr",service)
+         local service = skynet.newservice("agentmgr","agentmgr",0)
+         skynet.name("agentmgr",service)
       else
             local proxy = cluster.proxy(agentNode,"agentmgr")
             skynet.name("agentmgr",proxy)
+      end
+
+      for _, sceneId in pairs(serviceConfig.scene[currNode]) do
+         local srv = skynet.newservice("scene","scene",sceneId)
+         skynet.name("scene"..sceneId,srv)
       end
 
       -- skynet.error("[start main]")

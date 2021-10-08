@@ -7,7 +7,8 @@ return{
    agentmgr = {node = "node1"},
    --scene
    scene={
-      node1={1001,1002},
+      --node1={1001,1002},
+      node1={1001},
       --node2={1003},
    },
    node1={

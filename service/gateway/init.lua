@@ -4,7 +4,7 @@ local s = require "service"
 local pb=require "pb"
 local protoc = require "protoc"
 local socket = require "skynet.socket"
-local idToName,nameToId = require "protoConfig"
+local idToName = require "protoConfig"
 
 --local proto3 = true
 -- protobuf
@@ -12,6 +12,7 @@ local pc = protoc.new()
 pc:addpath(skynet.getenv("proto_path"))
 -- login relate
 pc:loadfile("gateway.proto")
+pc:loadfile("agent.proto")
 conns = {} -- [fd]=conn
 players = {} -- [playerid] = gateplayer
 
@@ -44,16 +45,18 @@ local msg_unpack = function(id,recv)
    return msg.cmd,msg
 end
 
-local msg_pack=function (id,msg)
+local msg_pack=function (msg)
    --local data = pb_buf.new(buf)
-
+   local id = msg.id
    local buf = pb.encode(idToName[id],msg)
    local len = #buf
    len = string.pack(">I4",len)
    id = string.pack(">I4",id)
    local send = len..id..buf
-   print(send)
+   print(#send)
+   skynet.error("#send:",#send)
    --return pb_buf.result(data)
+   print("send",tostring(send))
    return send
 end
 
@@ -68,14 +71,24 @@ end
 
 s.resp.send_by_fd = function (source,fd,msg)
    if not conns[fd] then
+      skynet.error("没找到fd")
       return
    end
-   local buff = msg_pack(nameToId["gateway."..msg.cmd],msg)
+   local buff = msg_pack(msg)
+   for key, value in pairs(msg) do
+      print(key,value)
+   end
+
+
    skynet.error("send "..fd.." {"..table.concat(msg,",").."}")
    socket.write(fd,buff)
 end
 
 s.resp.send = function (source,playerid,msg)
+   if not msg then
+      return
+   end
+
    local gplayer= players[playerid]
    if gplayer ==nil then
       return
@@ -119,6 +132,7 @@ local disconnect = function (fd)
 end
 
 s.resp.kick = function (source,playerid)
+   skynet.error("gateway kick:",playerid)
    local gplayer = players[playerid]
    if not gplayer then
       return
@@ -135,7 +149,7 @@ end
 
 local process_msg = function (fd,id,msgblock)
    local cmd,msg = msg_unpack(id,msgblock)
-   --skynet.error("recv ".."{"..table.concat(msg,",").."}")
+   skynet.error("procesed message: ",cmd," gateway-",144)
    local conn = conns[fd]
    local playerid = conn.playerid
    if not playerid then
@@ -143,9 +157,6 @@ local process_msg = function (fd,id,msgblock)
       local nodecfg = serviceConfig[node]
       local loginid = math.random(1,#nodecfg.login)
       local login = "login"..loginid
-
-      skynet.error("Login ..........",login,cmd,msg)
-
       skynet.send(login,"lua","client",fd,cmd,msg)
    else
       local gplayer = players[playerid]
@@ -156,7 +167,6 @@ end
 
 local recv_loop = function (fd)
    socket.start(fd)
-   skynet.error("socket connected"..fd)
    while true do
       local head = socket.read(fd,8)
       local len,id,_ =string.unpack(">I4I4",head)
@@ -184,7 +194,6 @@ end
 function s.init()
    local node = skynet.getenv("node")
    local nodecfg = serviceConfig[node]
-
    local port = nodecfg.gateway[s.id].port
    local listenfd = socket.listen("0.0.0.0",port)
    skynet.error("Listening socket: ","0.0.0.0",port)
