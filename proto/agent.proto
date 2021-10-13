@@ -21,14 +21,61 @@ message startGame{
 }
 
 
-message frame{
-    int32 id=1;
-    string cmd = 2;
-}
-
 message resp{
     int32 id = 1;
     string cmd = 2;
     int32 stat=3;
     string reason=4;
 }
+
+message move{
+    float Horizontal = 1;
+    float Vertical = 2;
+}
+
+message target{
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+message rotate{
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+message aim{
+    bool aimIk = 1;
+    float aiming = 2;
+}
+
+message position{
+    float x=1;
+    float y=2;
+    float z=3;
+}
+
+message frame{
+    string playerid = 1;
+    move move = 2;
+    target target = 3;
+    rotate rotate = 4;
+    aim aim = 5;
+    position position = 6;
+}
+
+message broadcastCtoS{
+    int32 id = 1;
+    string cmd = 2;
+    string playerid = 3;
+    frame frame = 4;
+    int32 step = 5;
+}
+
+// message broadcastStoC{
+//     int32 id = 1;
+//     string cmd = 2;
+//     int32 frame = 3;
+//     repeated frame frames = 4;
+// }

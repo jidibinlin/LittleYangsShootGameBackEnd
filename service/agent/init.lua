@@ -47,19 +47,24 @@ end
 s.client.enterScene = function(msg)
    skynet.error("请求进入场景")
    if s.sname then
-      return {"enter",1,"already in the scene"}
+      return {id=3,cmd="sureEnterScene",stat=2,reason="already in the scene"}
    end
    local snode,sid = random_scene()
    local sname ="scene"..sid
    skynet.error("player id: ",s.id)
    local isok = s.call(snode,sname,"enterScene",s.id,curNode,skynet.self())
 
+
    if not isok then
-      return {id=3,cmd="sureEnterScene",1,"enter scene successed"}
+      s.snode = snode
+      s.sname = sname
+      return {id=3,cmd="sureEnterScene",stat=1,reason="enter scene successed"}
    end
-   s.snode = snode
-   s.sname = sname
    return nil
+end
+
+s.client.broadcastCtoS = function (msg)
+   s.send(s.snode,s.sname,"broadcastCtoS",s.id,msg)
 end
 
 

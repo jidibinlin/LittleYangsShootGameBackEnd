@@ -39,6 +39,9 @@ skynet.start(function ()
          skynet.name("scene"..sceneId,srv)
       end
 
+      local db = skynet.newservice("mysql","db",0)
+      skynetManager.name("db",db)
+
       -- skynet.error("[start main]")
       -- skynet.newservice("gateway","gateway",1)
       -- local login1 = skynet.newservice("login","login1",2)

@@ -18,7 +18,9 @@ s.client.login = function (fd,msg,source)
    local gate = source
    local node = skynet.getenv("node")
 
-   if not skynet.send("db","lua","login",msg.playerid,msg.playername,msg.password) then
+   local isok = skynet.call("db","lua","login",msg.playerid,msg.password)
+
+   if not isok  then
       skynet.error(msg.playerid.."登录失败 密码错误或未注册")
       return {id=2, cmd="loginResp",stat=2,reason="密码错误或未注册"}
    end

@@ -61,9 +61,20 @@ function M.send(node,srv,...)
    end
 end
 
+function M.tablePrint(msg)
+   for key, value in pairs(msg) do
+      if type(value) == "table" then
+         print(key,M.tablePrint(value))
+         --tablePrint(value)
+      else
+         print(key,value)
+      end
+   end
+end
+
 function M.start(name,id,...)
-   M.name = name
-   if name~="agent" then
+      M.name = name
+      if name~="agent" then
       M.id = tonumber(id)
    else
       M.id = tostring(id)

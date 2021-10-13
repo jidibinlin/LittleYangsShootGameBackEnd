@@ -6,44 +6,37 @@ local s = require "service"
 players={}
 local playerNum=0
 
-local key = true;
 
 local function player()
    local m = {
       playerid = nil,
       node = nil,
       agent = nil,
+      --queeKey = true,
+      posi = 0;
       msgquee={},
    }
    return m
 end
 
 local function broadcast(frame)
-   while key == false do
+   for _, player in pairs(players) do
+      local count =  #player.msgquee
+      if count-player.posi>=0 then
+         for _, broadPlayer in pairs(players) do
+            if broadPlayer.playerid == player.playerid then
+               goto continue
+            end
+            for i = (player.posi), count do
+               --local msg = table.remove(player.msgquee)
+               --skynet.error("send broadcastCtoS to",broadPlayer.playerid,"count",count,"posi",player.posi)
+               s.send(broadPlayer.node,broadPlayer.agent,"send",player.msgquee[i])
+            end
+            ::continue::
+         end
+      end
+      player.posi = count
    end
-   key = false
-   skynet.error("广播")
-   local msg = {}
-   msg.id = 7
-   --msg.cmd =idToName[msg.id]
-   msg.cmd = "broadcastStoC"
-   msg.frame = frame
-   msg.frames = {}
-
-   for index, player in pairs(players) do
-      skynet.error("broadcastStoC insert",player.playerid)
-      local msgQuee = player.msgquee
-      local frame = table.remove(msgQuee)
-      table.insert(msg.frames,frame)
-      --msg.frames[player.playerid]=frame
-   end
-   key = true
-   skynet.error("broadcastStoC frame number     "..#msg.frames)
-
-   for index, player in pairs(players) do
-      s.send(player.node,player.agent,"send",msg)
-   end
-
 end
 
 local function update(frame)
@@ -82,7 +75,7 @@ local startGame = function ()
             end
             skynet.error("current frame",frame)
             local etime = skynet.now()
-            local waittime = frame*20-(etime-stime)
+            local waittime = frame*2-(etime-stime)
             if waittime <=0 then
                waittime = 1
             end
@@ -111,12 +104,14 @@ end
 
 s.resp.broadcastCtoS = function(source,playerid,msg)
    --skynet.error("broadcastCtoS")
-   while key == false do
-   end
+   -- local player = player[playerid]
 
-   key = false
-   table.insert(players[playerid].msgquee,(msg.frame))
-   key = true
+   -- while  player.queeKey == false do
+   -- end
+
+   --player.queeKey = false
+   table.insert(players[playerid].msgquee,(msg))
+   --player.queeKey = true
 end
 
 -- TODO sync time with players

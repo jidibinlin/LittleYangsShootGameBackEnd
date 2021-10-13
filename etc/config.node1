@@ -14,7 +14,7 @@ luaservice = "./service/?.lua;".."./service/?/init.lua;".."./skynet/service/?.lu
 lua_path = "./etc/?.lua;".."./lualib/?.lua;".."./skynet/lualib/?.lua;".."./skynet/lualib/?/init.lua;"
 lua_cpath="./luaclib/?.so;".."./skynet/luaclib/?.so;"
 
-project_root="/home/qibin/Documents/LittleYangsShootGameBackEnd/"
+project_root="/home/qibin/LittleYangsShootGameBackEnd/"
 
 proto_path = project_root.."proto"
 

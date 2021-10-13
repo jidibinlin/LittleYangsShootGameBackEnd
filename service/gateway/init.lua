@@ -34,9 +34,22 @@ function gatePlayer()
    return m
 end
 
+local function tablePrint(msg)
+   for key, value in pairs(msg) do
+      if type(value) == "table" then
+         print(key,tablePrint(value))
+         --tablePrint(value)
+      else
+         print(key,value)
+      end
+   end
+end
+
+
 local msg_unpack = function(id,recv)
-   print(recv)
+
    local msg = pb.decode(idToName[id],recv)
+   --tablePrint(msg)
    --Debug
    -- for key, value in pairs(msg) do
    -- print(key,value)
@@ -47,16 +60,15 @@ end
 
 local msg_pack=function (msg)
    --local data = pb_buf.new(buf)
+   --tablePrint(msg)
    local id = msg.id
    local buf = pb.encode(idToName[id],msg)
    local len = #buf
+   skynet.error("msg",msg.cmd,"len",len)
    len = string.pack(">I4",len)
    id = string.pack(">I4",id)
    local send = len..id..buf
-   print(#send)
-   skynet.error("#send:",#send)
    --return pb_buf.result(data)
-   print("send",tostring(send))
    return send
 end
 
@@ -75,12 +87,11 @@ s.resp.send_by_fd = function (source,fd,msg)
       return
    end
    local buff = msg_pack(msg)
-   for key, value in pairs(msg) do
-      print(key,value)
-   end
+   --for key, value in pairs(msg) do
+   --  print(key,value)
+   --end
 
-
-   skynet.error("send "..fd.." {"..table.concat(msg,",").."}")
+   --skynet.error("send "..fd.." {"..table.concat(msg,",").."}")
    socket.write(fd,buff)
 end
 
@@ -172,6 +183,7 @@ local recv_loop = function (fd)
       local len,id,_ =string.unpack(">I4I4",head)
       local recv = socket.read(fd,tonumber(len))
       if recv then
+         skynet.error("proto id = "..tostring(id))
          process_msg(fd,id,recv)
       else
          skynet.error("skynet close"..fd)
