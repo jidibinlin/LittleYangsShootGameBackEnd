@@ -1,5 +1,5 @@
 
-æ
+ö
 agent.protoagent"J
 
 enterScene
@@ -39,7 +39,7 @@ Horizontal
 position
 x (Rx
 y (Ry
-z (Rz"Ý
+z (Rz"í
 frame
 playerid (	Rplayerid
 move (2.agent.moveRmove%
@@ -47,7 +47,8 @@ Horizontal
 rotate (2.agent.rotateRrotate
 aim (2
 .agent.aimRaim+
-position (2.agent.positionRposition"…
+position (2.agent.positionRposition
+hp (Rhp"…
 broadcastCtoS
 id (Rid
 cmd (	Rcmd

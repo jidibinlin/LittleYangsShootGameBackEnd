@@ -12,8 +12,7 @@ local function player()
       playerid = nil,
       node = nil,
       agent = nil,
-      --queeKey = true,
-      posi = 0;
+      queeKey = true,
       msgquee={},
    }
    return m
@@ -22,20 +21,20 @@ end
 local function broadcast(frame)
    for _, player in pairs(players) do
       local count =  #player.msgquee
-      if count-player.posi>=0 then
+      if count>0 then
+         local msg = table.remove(player.msgquee)
          for _, broadPlayer in pairs(players) do
             if broadPlayer.playerid == player.playerid then
                goto continue
             end
-            for i = (player.posi), count do
-               --local msg = table.remove(player.msgquee)
-               --skynet.error("send broadcastCtoS to",broadPlayer.playerid,"count",count,"posi",player.posi)
-               s.send(broadPlayer.node,broadPlayer.agent,"send",player.msgquee[i])
-            end
+            --for i = (player.posi), count do
+            --skynet.error("send broadcastCtoS to",broadPlayer.playerid,"count",count,"posi",player.posi)
+            s.send(broadPlayer.node,broadPlayer.agent,"send",msg)
+            --end
             ::continue::
          end
       end
-      player.posi = count
+      --player.posi = count
    end
 end
 

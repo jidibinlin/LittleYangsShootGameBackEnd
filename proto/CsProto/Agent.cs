@@ -34,14 +34,14 @@ namespace Agent {
             "KQoGdGFyZ2V0EgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCIikK",
             "BnJvdGF0ZRIJCgF4GAEgASgCEgkKAXkYAiABKAISCQoBehgDIAEoAiIkCgNh",
             "aW0SDQoFYWltSWsYASABKAgSDgoGYWltaW5nGAIgASgCIisKCHBvc2l0aW9u",
-            "EgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCIq4BCgVmcmFtZRIQ",
+            "EgkKAXgYASABKAISCQoBeRgCIAEoAhIJCgF6GAMgASgCIsoBCgVmcmFtZRIQ",
             "CghwbGF5ZXJpZBgBIAEoCRIZCgRtb3ZlGAIgASgLMgsuYWdlbnQubW92ZRId",
             "CgZ0YXJnZXQYAyABKAsyDS5hZ2VudC50YXJnZXQSHQoGcm90YXRlGAQgASgL",
             "Mg0uYWdlbnQucm90YXRlEhcKA2FpbRgFIAEoCzIKLmFnZW50LmFpbRIhCghw",
-            "b3NpdGlvbhgGIAEoCzIPLmFnZW50LnBvc2l0aW9uImUKDWJyb2FkY2FzdEN0",
-            "b1MSCgoCaWQYASABKAUSCwoDY21kGAIgASgJEhAKCHBsYXllcmlkGAMgASgJ",
-            "EhsKBWZyYW1lGAQgASgLMgwuYWdlbnQuZnJhbWUSDAoEc3RlcBgFIAEoBWIG",
-            "cHJvdG8z"));
+            "b3NpdGlvbhgGIAEoCzIPLmFnZW50LnBvc2l0aW9uEgoKAmhwGAcgASgFEg4K",
+            "BnJlbG9hZBgIIAEoCCJlCg1icm9hZGNhc3RDdG9TEgoKAmlkGAEgASgFEgsK",
+            "A2NtZBgCIAEoCRIQCghwbGF5ZXJpZBgDIAEoCRIbCgVmcmFtZRgEIAEoCzIM",
+            "LmFnZW50LmZyYW1lEgwKBHN0ZXAYBSABKAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -54,7 +54,7 @@ namespace Agent {
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.rotate), global::Agent.rotate.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.aim), global::Agent.aim.Parser, new[]{ "AimIk", "Aiming" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.position), global::Agent.position.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Agent.frame), global::Agent.frame.Parser, new[]{ "Playerid", "Move", "Target", "Rotate", "Aim", "Position" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Agent.frame), global::Agent.frame.Parser, new[]{ "Playerid", "Move", "Target", "Rotate", "Aim", "Position", "Hp", "Reload" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.broadcastCtoS), global::Agent.broadcastCtoS.Parser, new[]{ "Id", "Cmd", "Playerid", "Frame", "Step" }, null, null, null, null)
           }));
     }
@@ -2461,6 +2461,8 @@ namespace Agent {
       rotate_ = other.rotate_ != null ? other.rotate_.Clone() : null;
       aim_ = other.aim_ != null ? other.aim_.Clone() : null;
       position_ = other.position_ != null ? other.position_.Clone() : null;
+      hp_ = other.hp_;
+      reload_ = other.reload_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2542,6 +2544,30 @@ namespace Agent {
       }
     }
 
+    /// <summary>Field number for the "hp" field.</summary>
+    public const int HpFieldNumber = 7;
+    private int hp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Hp {
+      get { return hp_; }
+      set {
+        hp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "reload" field.</summary>
+    public const int ReloadFieldNumber = 8;
+    private bool reload_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Reload {
+      get { return reload_; }
+      set {
+        reload_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2563,6 +2589,8 @@ namespace Agent {
       if (!object.Equals(Rotate, other.Rotate)) return false;
       if (!object.Equals(Aim, other.Aim)) return false;
       if (!object.Equals(Position, other.Position)) return false;
+      if (Hp != other.Hp) return false;
+      if (Reload != other.Reload) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2576,6 +2604,8 @@ namespace Agent {
       if (rotate_ != null) hash ^= Rotate.GetHashCode();
       if (aim_ != null) hash ^= Aim.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
+      if (Hp != 0) hash ^= Hp.GetHashCode();
+      if (Reload != false) hash ^= Reload.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2618,6 +2648,14 @@ namespace Agent {
         output.WriteRawTag(50);
         output.WriteMessage(Position);
       }
+      if (Hp != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(Hp);
+      }
+      if (Reload != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(Reload);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2652,6 +2690,14 @@ namespace Agent {
         output.WriteRawTag(50);
         output.WriteMessage(Position);
       }
+      if (Hp != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(Hp);
+      }
+      if (Reload != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(Reload);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2679,6 +2725,12 @@ namespace Agent {
       }
       if (position_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Position);
+      }
+      if (Hp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Hp);
+      }
+      if (Reload != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2724,6 +2776,12 @@ namespace Agent {
           Position = new global::Agent.position();
         }
         Position.MergeFrom(other.Position);
+      }
+      if (other.Hp != 0) {
+        Hp = other.Hp;
+      }
+      if (other.Reload != false) {
+        Reload = other.Reload;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2779,6 +2837,14 @@ namespace Agent {
             input.ReadMessage(Position);
             break;
           }
+          case 56: {
+            Hp = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            Reload = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -2831,6 +2897,14 @@ namespace Agent {
               Position = new global::Agent.position();
             }
             input.ReadMessage(Position);
+            break;
+          }
+          case 56: {
+            Hp = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            Reload = input.ReadBool();
             break;
           }
         }

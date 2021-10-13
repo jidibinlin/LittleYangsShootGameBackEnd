@@ -63,6 +63,8 @@ message frame{
     rotate rotate = 4;
     aim aim = 5;
     position position = 6;
+    int32 hp = 7;
+    bool reload = 8;
 }
 
 message broadcastCtoS{
@@ -72,6 +74,54 @@ message broadcastCtoS{
     frame frame = 4;
     int32 step = 5;
 }
+
+message createScene{
+    int32 id = 1;
+    string cmd = 2;
+    string sceneName=3;
+}
+
+message addScene{
+    int32 id = 1;
+    string cmd = 2;
+    string sceneName=3;
+}
+
+message requestSceneList{
+    int32 id = 1;
+    string cmd = 2;
+    string playerid = 3;
+}
+
+message responseSceneList{
+    int32 id =1;
+    string cmd = 2;
+    repeated string scenes=3;
+}
+
+message addPerson{
+    int32 id =1;
+    string cmd = 2;
+}
+
+message requestScenePersonList{
+    int32 id =1;
+    string cmd = 2;
+    repeated string persons=3;
+}
+
+message requestLeaveScene{
+    int32 id =1;
+    string cmd =2;
+    string playerid=3;
+}
+
+message assignSceneMaster{
+    int32 id =1;
+    string cmd =2;
+    string playerid=3;
+}
+
 
 // message broadcastStoC{
 //     int32 id = 1;
