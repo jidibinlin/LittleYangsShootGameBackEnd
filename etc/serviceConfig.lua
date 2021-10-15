@@ -5,6 +5,7 @@ return{
    },
    --agentmgr
    agentmgr = {node = "node1"},
+   scenemgr = {node = "node1"},
    --scene
    scene={
       --node1={1001,1002},

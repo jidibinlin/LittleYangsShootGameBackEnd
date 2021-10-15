@@ -122,6 +122,11 @@ message assignSceneMaster{
     string playerid=3;
 }
 
+message pvp{
+    int32 id = 1;
+    string cmd = 2;
+}
+
 
 // message broadcastStoC{
 //     int32 id = 1;

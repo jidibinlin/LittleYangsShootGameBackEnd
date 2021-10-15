@@ -30,29 +30,36 @@ skynet.start(function ()
          local service = skynet.newservice("agentmgr","agentmgr",0)
          skynet.name("agentmgr",service)
       else
-            local proxy = cluster.proxy(agentNode,"agentmgr")
-            skynet.name("agentmgr",proxy)
+         local proxy = cluster.proxy(agentNode,"agentmgr")
+         skynet.name("agentmgr",proxy)
       end
 
-      for _, sceneId in pairs(serviceConfig.scene[currNode]) do
-         local srv = skynet.newservice("scene","scene",sceneId)
-         skynet.name("scene"..sceneId,srv)
+      local sceneMgrNode = serviceConfig.scenemgr.node
+
+      if currNode == sceneMgrNode then
+         local service = skynet.newservice("scenemgr","scenemgr",0)
+         skynet.name("scenemgr",service)
+      else
+         local proxy = cluster.proxy(sceneMgrNode,"scenemgr")
+         skynet.name("scenemgr",proxy)
       end
+
+      --skynet.call("scenemgr","lua","createScene")
+
+      if currNode == "node2" then
+         skynet.error("requre create scene")
+         --cluster.call(serviceConfig.scenemgr.node,"scenemgr","createScene")
+         skynet.call("scenemgr","lua","createScene")
+      end
+
+      -- for _, sceneId in pairs(serviceConfig.scene[currNode]) do
+      --    local srv = skynet.newservice("scene","scene",sceneId)
+      --    skynet.name("scene"..sceneId,srv)
+      -- end
 
       local db = skynet.newservice("mysql","db",0)
       skynetManager.name("db",db)
+      skynet.error("start successed")
 
-      -- skynet.error("[start main]")
-      -- skynet.newservice("gateway","gateway",1)
-      -- local login1 = skynet.newservice("login","login1",2)
-      -- local login2 = skynet.newservice("login","login2",3)
-      -- local db = skynet.newservice("mysql","db",4)
-      -- skynetManager.name("login1",login1)
-      -- skynetManager.name("login2",login2)
-      -- skynetManager.name("db",db)
-
-      --print(skynet.call("db","lua","login",1,1))
-      --skynet.call("db","lua","regist","2694273649@qq.com","杨启玢","123456")
-      -- 退出自身
       skynet.exit()
 end)

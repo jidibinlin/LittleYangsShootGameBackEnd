@@ -101,22 +101,12 @@ end
 --    end
 -- end
 
-s.resp.enterScene = function(source,p)
-   skynet.error("scene enter scene",p)
+s.resp.enterScene = function(source,players)
+   skynet.error("enter scene")
 
-   for _, enPlayer in pairs(p)do
+   for _, player in pairs(players)do
       local foo = player()
-      foo.playerid = enPlayer.playerid
-      foo.node = enPlayer.node
-      foo.agent = enPlayer.agent
-      s.call(foo.node,foo.agent,"enterScene",foo.node,skynet.self())
-      print(enPlayer.playerid.."enter scene")
-      --table.insert(players,foo)
-      players[foo.playerid] = foo
    end
-   skynet.error("loop terminate")
-
-   startGame()
 
 end
 

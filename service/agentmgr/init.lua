@@ -1,13 +1,17 @@
 local skynet = require "skynet"
 local s= require "service"
+local serviceConfig = require "serviceConfig"
 
 STATUS = {
    LOGIN = 1,
    GAME = 2,
    LOGOUT = 4,
+   PVP = 5,
 }
 
 local players = {}
+local pvp = {}
+local gaming = {}
 
 function mgrplayer()
    local m = {
@@ -55,9 +59,17 @@ s.resp.reqlogin = function(source,playerid,node,gate)
    players[playerid] = player
    local agent = s.call(node,"nodemgr","newservice","agent","agent",playerid)
    player.agent = agent
-   player.status = STATUS.GAME
+   player.status = STATUS.WAIT
    skynet.error("init agent success")
    return true,agent
+end
+
+s.resp.pvp = function(source,playerid)
+   local player = players[playerid]
+   if player.status == STATUS.WAIT then
+      player.status = STATUS.PVP
+      table.insert(pvp,player)
+   end
 end
 
 s.resp.reqkick = function (source,playerid,reason)
@@ -74,6 +86,24 @@ s.resp.reqkick = function (source,playerid,reason)
    s.send(mplayer.node,mplayer.gate,"kick",playerid)
    players[playerid]=nil
    return true
+end
+
+s.init = function()
+   skynet.fork(function()
+         while true do
+            if #pvp >= 2 then
+               --TODO: start the game through scenemanager
+               local foo = {}
+               for i = 1, 2 do
+                  table.insert(foo,table.remove(pvp,1))
+               end
+               skynet.error("here is running",#foo)
+               s.call(serviceConfig.scenemgr.node,"scenemgr","enterScene",foo)
+            end
+            skynet.sleep(1000)
+         end
+   end
+   )
 end
 
 s.start(...)

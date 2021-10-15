@@ -23,45 +23,53 @@ s.resp.client = function (source,cmd,msg)
    end
 end
 
-local function random_scene()
-   skynet.error("随机场景中")
-   local nodes = {}
-   for index, value in pairs(serviceConfig.scene) do
-      table.insert(nodes,index)
-      if serviceConfig.scene[curNode] then
-         table.insert(nodes,curNode)
-      end
-   end
-   print("nodes number=",#nodes)
+-- local function random_scene()
+--    skynet.error("随机场景中")
+--    local nodes = {}
+--    for index, value in pairs(serviceConfig.scene) do
+--       table.insert(nodes,index)
+--       if serviceConfig.scene[curNode] then
+--          table.insert(nodes,curNode)
+--       end
+--    end
+--    print("nodes number=",#nodes)
 
-   local key = math.random(1,#nodes)
-   local scenenode = nodes[key]
+--    local key = math.random(1,#nodes)
+--    local scenenode = nodes[key]
 
-   local scenelist = serviceConfig.scene[scenenode]
-   local key = math.random(1,#scenelist)
-   local sceneid = scenelist[key]
-   return scenenode,sceneid
+--    local scenelist = serviceConfig.scene[scenenode]
+--    local key = math.random(1,#scenelist)
+--    local sceneid = scenelist[key]
+--    return scenenode,sceneid
+-- end
+
+
+s.resp.enterScene = function(source,snode,sname)
+   -- skynet.error("请求进入场景")
+   -- if s.sname then
+   --    return {id=3,cmd="sureEnterScene",stat=2,reason="already in the scene"}
+   -- end
+   -- local snode,sid = random_scene()
+   -- local sname ="scene"..sid
+   -- skynet.error("player id: ",s.id)
+   -- local isok = s.call(snode,sname,"enterScene",s.id,curNode,skynet.self())
+
+
+   -- if not isok then
+   --    s.snode = snode
+   --    s.sname = sname
+   --    return {id=3,cmd="sureEnterScene",stat=1,reason="enter scene successed"}
+   -- end
+   -- return nil
+   s.snode = snode
+   s.sname = sname
+   return true
 end
 
-
-s.client.enterScene = function(msg)
-   skynet.error("请求进入场景")
-   if s.sname then
-      return {id=3,cmd="sureEnterScene",stat=2,reason="already in the scene"}
-   end
-   local snode,sid = random_scene()
-   local sname ="scene"..sid
-   skynet.error("player id: ",s.id)
-   local isok = s.call(snode,sname,"enterScene",s.id,curNode,skynet.self())
-
-
-   if not isok then
-      s.snode = snode
-      s.sname = sname
-      return {id=3,cmd="sureEnterScene",stat=1,reason="enter scene successed"}
-   end
-   return nil
+s.client.pvp = function ()
+   s.call(serviceConfig.agentmgr.node,"agentmgr","pvp",s.id)
 end
+
 
 s.client.broadcastCtoS = function (msg)
    s.send(s.snode,s.sname,"broadcastCtoS",s.id,msg)
