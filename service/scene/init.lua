@@ -22,7 +22,7 @@ local function broadcast(frame)
    for _, player in pairs(players) do
       local count =  #player.msgquee
       if count>0 then
-         local msg = table.remove(player.msgquee)
+         local msg = table.remove(player.msgquee,1)
          for _, broadPlayer in pairs(players) do
             if broadPlayer.playerid == player.playerid then
                goto continue

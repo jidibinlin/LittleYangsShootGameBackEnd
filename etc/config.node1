@@ -19,8 +19,8 @@ project_root="/home/qibin/LittleYangsShootGameBackEnd/"
 proto_path = project_root.."proto"
 
 -- 后台模式
---daemon = "./skynet.pid"
---logger = "./userlog"
+daemon = "./skynet.pid"
+logger = "./userlog"
 
 -- 当前节点
 node = "node1"
