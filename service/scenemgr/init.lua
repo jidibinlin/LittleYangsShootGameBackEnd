@@ -54,7 +54,7 @@ local createScene = function (node)
    --scene.name = node.."scene"..id
    tmp.srv = srv
    tmp.status = STATUS.WAIT
-   table.insert(scenes,tmp)
+   table.insert(scenes,id,tmp)
 end
 
 s.resp.createScene = function (source)
@@ -71,6 +71,9 @@ end
 
 s.resp.enterScene = function (source,players)
    s.call(skynet.getenv("node"),sceneNode[skynet.getenv("node")][1].srv,"enterScene",players)
+end
+
+s.resp.freeScene = function(source,node,id)
 end
 
 s.init = function()

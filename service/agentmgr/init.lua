@@ -5,13 +5,14 @@ local serviceConfig = require "serviceConfig"
 STATUS = {
    LOGIN = 1,
    GAME = 2,
+   WAIT = 3,
    LOGOUT = 4,
    PVP = 5,
+
 }
 
 local players = {}
 local pvp = {}
-local gaming = {}
 
 function mgrplayer()
    local m = {
@@ -35,6 +36,14 @@ s.resp.reqlogin = function(source,playerid,node,gate)
 
    if mplayer and mplayer.status == STATUS.LOGIN then
       skynet.error("reqlogin fail,player are logining"..playerid)
+      return false
+   end
+   if mplayer and mplayer.status == STATUS.PVP then
+      skynet.error("reqlogin fail,player are pvp"..playerid)
+      return false
+   end
+   if mplayer and mplayer.status == STATUS.GAME then
+      skynet.error("reqlogin fail, player are gaming"..playerid)
       return false
    end
 
@@ -88,6 +97,14 @@ s.resp.reqkick = function (source,playerid,reason)
    return true
 end
 
+-- s.resp = function(source,players)
+
+-- end
+s.resp.leave_scene = function (source,playerid)
+   players[playerid].status = STATUS.WAIT
+   return true
+end
+
 s.init = function()
    skynet.fork(function()
          while true do
@@ -95,7 +112,9 @@ s.init = function()
                --TODO: start the game through scenemanager
                local foo = {}
                for i = 1, 2 do
-                  table.insert(foo,table.remove(pvp,1))
+                  local p = table.remove(pvp,1)
+                  table.insert(foo,p)
+                  p.status = STATUS.GAME
                end
                skynet.error("here is running",#foo)
                s.call(serviceConfig.scenemgr.node,"scenemgr","enterScene",foo)

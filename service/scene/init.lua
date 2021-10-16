@@ -52,9 +52,6 @@ local startGame = function ()
       print("insert player id ",player.playerid)
       table.insert(playerIds,player.playerid)
    end
-   -- for key, value in pairs(playerIds) do
-   --    print(value)
-   -- end
 
    for _, player in pairs(players) do
       s.send(player.node,player.agent,"send",{id=5,cmd="startGame",players=playerIds})
@@ -64,6 +61,15 @@ local startGame = function ()
          local frame = 0
 
          while true do
+            if #players <=1 then
+               for playerid, _ in pairs(players) do
+                  s.resp.leave(nil,playerid)
+                  -- TODO send msg to scenemgr to back this scene
+                  s.call(serviceConfig.scenemgr.node,"scenemgr","freeScene",skynet.getenv("node"),s.id)
+               end
+               return
+            end
+
             frame = frame+1
             --local beforeBroad = skynet.now()
             local isok,err = pcall(update,frame)
@@ -114,7 +120,6 @@ s.resp.enterScene = function(source,p)
       --table.insert(players,foo)
       players[foo.playerid] = foo
    end
-   skynet.error("loop terminate")
 
    startGame()
 
@@ -144,8 +149,10 @@ s.resp.leave = function (source,playerid)
    if not players[playerid] then
       return false
    end
+   --local player = players[playerid]
    players[playerid]=nil
    -- TODO return leave msg
+   return s.call(serviceConfig.scenemgr.node,"agentmgr","leave_scene",playerid)
 end
 
 s.start(...)
