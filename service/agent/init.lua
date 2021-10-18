@@ -9,74 +9,40 @@ s.gate=nil
 s.snode = nil
 s.sname = nil
 
-
 s.resp.client = function (source,cmd,msg)
    skynet.error("agent client dispatch "..cmd .." agent-",14)
-   s.gate = source
+
+   if not s.gate then
+      s.gate = source
+   end
    if s.client[cmd] then
-      local ret_msg = s.client[cmd](msg,source)
+      local ret_msg = s.client[cmd](msg,s.gate)
       if ret_msg then
-         skynet.send(source,"lua","send",s.id,ret_msg)
+         skynet.send(s.gate,"lua","send",s.id,ret_msg)
       end
    else
       skynet.error("s.resp.client fial",cmd)
    end
 end
 
--- local function random_scene()
---    skynet.error("随机场景中")
---    local nodes = {}
---    for index, value in pairs(serviceConfig.scene) do
---       table.insert(nodes,index)
---       if serviceConfig.scene[curNode] then
---          table.insert(nodes,curNode)
---       end
---    end
---    print("nodes number=",#nodes)
-
---    local key = math.random(1,#nodes)
---    local scenenode = nodes[key]
-
---    local scenelist = serviceConfig.scene[scenenode]
---    local key = math.random(1,#scenelist)
---    local sceneid = scenelist[key]
---    return scenenode,sceneid
--- end
-
-
 s.resp.enterScene = function(source,snode,sname)
-   -- skynet.error("请求进入场景")
-   -- if s.sname then
-   --    return {id=3,cmd="sureEnterScene",stat=2,reason="already in the scene"}
-   -- end
-   -- local snode,sid = random_scene()
-   -- local sname ="scene"..sid
-   -- skynet.error("player id: ",s.id)
-   -- local isok = s.call(snode,sname,"enterScene",s.id,curNode,skynet.self())
-
-
-   -- if not isok then
-   --    s.snode = snode
-   --    s.sname = sname
-   --    return {id=3,cmd="sureEnterScene",stat=1,reason="enter scene successed"}
-   -- end
-   -- return nil
    s.snode = snode
    s.sname = sname
    return true
 end
 
 s.client.pvp = function ()
-   s.call(serviceConfig.agentmgr.node,"agentmgr","pvp",s.id)
+   local stat =  s.call(serviceConfig.agentmgr.node,"agentmgr","pvp",s.id)
+   if stat then
+      return {id =8 ,cmd = "surePvp"}
+   end
 end
-
 
 s.client.broadcastCtoS = function (msg)
    s.send(s.snode,s.sname,"broadcastCtoS",s.id,msg)
 end
 
-
-s.client.leave_scene = function ()
+s.client.leaveScene = function (msg)
    skynet.error("require leave scene")
    if not s.name then
       return
@@ -84,21 +50,22 @@ s.client.leave_scene = function ()
    s.call(s.snode,s.sname,"leave",s.id)
    s.snode = nil
    s.sname = nil
-end
 
--- s.client.work = function (msg)
---    s.leave_scene()
---    return {"work:"..msg.cmd}
--- end
+   if not msg.reason then
+      msg.reason = "request leave scene success"
+   end
+   --TODO : return proto
+   return {id = 9,cmd = "respLeaveScene",reason = msg.reason}
+end
 
 s.resp.send = function (source,msg)
    skynet.send(s.gate,"lua","send",s.id,msg)
 end
 
-
 s.resp.kick = function (source)
    skynet.error("agent kick")
-   skynet.sleep(200)
+   skynet.sleep(200
+   )
 end
 
 

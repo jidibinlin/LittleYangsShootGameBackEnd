@@ -27,10 +27,7 @@ local function broadcast(frame)
             if broadPlayer.playerid == player.playerid then
                goto continue
             end
-            --for i = (player.posi), count do
-            --skynet.error("send broadcastCtoS to",broadPlayer.playerid,"count",count,"posi",player.posi)
             s.send(broadPlayer.node,broadPlayer.agent,"send",msg)
-            --end
             ::continue::
          end
       end
@@ -41,6 +38,10 @@ end
 local function update(frame)
    -- TODO update fight info
    broadcast(frame)
+end
+local function kick(playerid)
+   local player = players[playerid]
+   s.call(player.node,player.agent,"client","leaveScene",{reason="you are kicked"})
 end
 
 local startGame = function ()
@@ -63,8 +64,7 @@ local startGame = function ()
          while true do
             if playerNum <=1 then
                for playerid, _ in pairs(players) do
-                  s.resp.leave(nil,playerid)
-                  playerNum = playerNum - 1
+                  kick(playerid)
                end
                s.call(serviceConfig.scenemgr.node,"scenemgr","freeScene",skynet.getenv("node"),s.id)
                return
@@ -74,7 +74,6 @@ local startGame = function ()
             --local beforeBroad = skynet.now()
             local isok,err = pcall(update,frame)
             --skynet.error("broad consume",beforeBroad,(skynet.now()))
-
             if not isok then
                skynet.error(err)
             end
@@ -89,23 +88,6 @@ local startGame = function ()
    end
    )
 end
-
--- s.resp.enterScene = function (source,playerid,node,agent)
---    skynet.error(playerid.."进入场景中")
---    if players[playerid] then
---       return false
---    end
---    local player = player()
---    player.playerid = playerid
---    player.node = node
---    player.agent = agent
---    playerNum = playerNum+1;
---    players[player.playerid]=player
-
---    if playerNum == 2 then
---       startGame()
---    end
--- end
 
 s.resp.enterScene = function(source,p)
    skynet.error("scene enter scene",p)
@@ -127,13 +109,6 @@ s.resp.enterScene = function(source,p)
 end
 
 s.resp.broadcastCtoS = function(source,playerid,msg)
-   --skynet.error("broadcastCtoS")
-   -- local player = player[playerid]
-
-   -- while  player.queeKey == false do
-   -- end
-
-   --player.queeKey = false
 
    if playerNum <=1 then
       return
@@ -143,13 +118,11 @@ s.resp.broadcastCtoS = function(source,playerid,msg)
    --player.queeKey = true
 end
 
--- TODO sync time with players
-
-
 s.resp.requickshot = function (source,playerid,node,agent,quickshot)
    local msgquee = players[playerid].msgquee
    table.insert(msgquee,quickshot)
 end
+
 
 s.resp.leave = function (source,playerid)
    if not players[playerid] then
@@ -159,8 +132,7 @@ s.resp.leave = function (source,playerid)
    players[playerid]=nil
    playerNum = playerNum-1
    skynet.error(playerid,"leave scene")
-   -- TODO return leave msg
-   return s.call(serviceConfig.scenemgr.node,"agentmgr","leave_scene",playerid)
+   return s.call(serviceConfig.scenemgr.node,"agentmgr","leaveScene",playerid)
 end
 
 s.start(...)

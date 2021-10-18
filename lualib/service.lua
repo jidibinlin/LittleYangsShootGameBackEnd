@@ -19,7 +19,7 @@ local dispatch = function (session,address,cmd,...)
    skynet.error("received call",address,cmd)
    local fun = M.resp[cmd]
    if not fun then
-      skynet.error(func..":"..cmd.." isNULL")
+      skynet.error(fun..":"..cmd.." isNULL")
       skynet.ret()
       return
    end
@@ -73,8 +73,8 @@ function M.tablePrint(msg)
 end
 
 function M.start(name,id,...)
-      M.name = name
-      if name~="agent" then
+   M.name = name
+   if name~="agent" then
       M.id = tonumber(id)
    else
       M.id = tostring(id)

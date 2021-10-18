@@ -16,10 +16,8 @@ message sureEnterScene{
 message startGame{
     int32 id = 1;
     string cmd = 2;
-    // TODO: add person
     repeated string players=3;
 }
-
 
 message resp{
     int32 id = 1;
@@ -81,48 +79,23 @@ message createScene{
     string sceneName=3;
 }
 
-message addScene{
+message leaveScene{
     int32 id = 1;
     string cmd = 2;
-    string sceneName=3;
 }
 
-message requestSceneList{
-    int32 id = 1;
-    string cmd = 2;
-    string playerid = 3;
-}
-
-message responseSceneList{
+message respLeaveScene{
     int32 id =1;
     string cmd = 2;
-    repeated string scenes=3;
-}
-
-message addPerson{
-    int32 id =1;
-    string cmd = 2;
-}
-
-message requestScenePersonList{
-    int32 id =1;
-    string cmd = 2;
-    repeated string persons=3;
-}
-
-message requestLeaveScene{
-    int32 id =1;
-    string cmd =2;
-    string playerid=3;
-}
-
-message assignSceneMaster{
-    int32 id =1;
-    string cmd =2;
-    string playerid=3;
+    string reason = 4;
 }
 
 message pvp{
+    int32 id = 1;
+    string cmd = 2;
+}
+
+message surePvp{
     int32 id = 1;
     string cmd = 2;
 }

@@ -45,8 +45,6 @@ function gatePlayer()
    local m ={
       playerid = nil,
       agent = nil,
-
-
       con = nil,
    }
    return m
@@ -63,20 +61,11 @@ local function tablePrint(msg)
    end
 end
 
-
 local msg_unpack = function(id,recv,fd)
 
    local state, msg = pcall(pb.decode,idToName[id],recv)
    --tablePrint(msg)
-   --Debug
-   -- for key, value in pairs(msg) do
-   -- print(key,value)
-   -- end
-   --print("msg unpack:"..table.concat(msg,","))
-
    if not state then
-
-      -- TODO: kick this player
       disconnect(fd)
       socket.close(fd)
       return
@@ -98,26 +87,12 @@ local msg_pack=function (msg)
    return send
 end
 
-
--- local msg_pack = function (msg)
---    local type = msg.cmd
---    local stat,size = pb.load("login."..type)
---    local buff = string.pack(">h",size)
---    buff = buff..pb.encode("login."..type,msg)
---    return buff
--- end
-
 s.resp.send_by_fd = function (source,fd,msg)
    if not conns[fd] then
       skynet.error("没找到fd")
       return
    end
    local buff = msg_pack(msg)
-   --for key, value in pairs(msg) do
-   --  print(key,value)
-   --end
-
-   --skynet.error("send "..fd.." {"..table.concat(msg,",").."}")
    socket.write(fd,buff)
 end
 

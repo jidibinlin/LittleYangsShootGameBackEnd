@@ -79,6 +79,7 @@ s.resp.pvp = function(source,playerid)
       player.status = STATUS.PVP
       table.insert(pvp,player)
    end
+   return true
 end
 
 s.resp.reqkick = function (source,playerid,reason)
@@ -86,12 +87,8 @@ s.resp.reqkick = function (source,playerid,reason)
    if not mplayer then
       return false
    end
-   -- if mplayer.status ~= STATUS.GAME then
-   --    return false
-   -- end
 
-
-   s.call(mplayer.node,mplayer.agent,"client","leave_scene")
+   s.send(mplayer.node,mplayer.agent,"client","leaveScene",{reason="you are kicked"})
    s.call(mplayer.node,mplayer.agent,"kick")
    s.send(mplayer.node,mplayer.agent,"exit")
    s.send(mplayer.node,mplayer.gate,"kick",playerid)
@@ -99,10 +96,7 @@ s.resp.reqkick = function (source,playerid,reason)
    return true
 end
 
--- s.resp = function(source,players)
-
--- end
-s.resp.leave_scene = function (source,playerid)
+s.resp.leaveScene = function (source,playerid)
    players[playerid].status = STATUS.WAIT
    skynet.error(playerid,"STATUS set to",players[playerid].status)
    return true
@@ -112,7 +106,6 @@ s.init = function()
    skynet.fork(function()
          while true do
             if #pvp >= 2 then
-               --TODO: start the game through scenemanager
                local foo = {}
                for i = 1, 2 do
                   local p = table.remove(pvp,1)
