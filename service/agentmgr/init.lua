@@ -91,7 +91,7 @@ s.resp.reqkick = function (source,playerid,reason)
    -- end
 
 
-   s.call(mplayer.node,mplayer.agent,"leave_scene")
+   s.call(mplayer.node,mplayer.agent,"client","leave_scene")
    s.call(mplayer.node,mplayer.agent,"kick")
    s.send(mplayer.node,mplayer.agent,"exit")
    s.send(mplayer.node,mplayer.gate,"kick",playerid)
