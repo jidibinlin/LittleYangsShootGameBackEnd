@@ -134,6 +134,11 @@ s.resp.broadcastCtoS = function(source,playerid,msg)
    -- end
 
    --player.queeKey = false
+
+   if playerNum <=1 then
+      return
+   end
+
    table.insert(players[playerid].msgquee,(msg))
    --player.queeKey = true
 end
