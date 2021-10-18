@@ -64,9 +64,9 @@ local startGame = function ()
             if playerNum <=1 then
                for playerid, _ in pairs(players) do
                   s.resp.leave(nil,playerid)
-                  -- TODO send msg to scenemgr to back this scene
-                  s.call(serviceConfig.scenemgr.node,"scenemgr","freeScene",skynet.getenv("node"),s.id)
+                  playerNum = playerNum - 1
                end
+               s.call(serviceConfig.scenemgr.node,"scenemgr","freeScene",skynet.getenv("node"),s.id)
                return
             end
 
