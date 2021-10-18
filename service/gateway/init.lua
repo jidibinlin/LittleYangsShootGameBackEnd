@@ -16,7 +16,6 @@ pc:loadfile("agent.proto")
 conns = {} -- [fd]=conn
 players = {} -- [playerid] = gateplayer
 
-
 function conn()
    local m ={
       fd=nil,
@@ -25,10 +24,29 @@ function conn()
    return m
 end
 
+local disconnect = function (fd)
+   local c = conns[fd]
+   if not c then
+      return
+   end
+
+   local playerid = c.playerid
+   if not playerid then
+      return
+   else
+      players[playerid]=nil
+      local reason = "lost connection"
+      skynet.call("agentmgr","lua","reqkick",playerid,reason)
+      skynet.error(playerid,reason)
+   end
+end
+
 function gatePlayer()
    local m ={
       playerid = nil,
       agent = nil,
+
+
       con = nil,
    }
    return m
@@ -46,15 +64,23 @@ local function tablePrint(msg)
 end
 
 
-local msg_unpack = function(id,recv)
+local msg_unpack = function(id,recv,fd)
 
-   local msg = pb.decode(idToName[id],recv)
+   local state, msg = pcall(pb.decode,idToName[id],recv)
    --tablePrint(msg)
    --Debug
    -- for key, value in pairs(msg) do
    -- print(key,value)
    -- end
    --print("msg unpack:"..table.concat(msg,","))
+
+   if not state then
+
+      -- TODO: kick this player
+      disconnect(fd)
+      socket.close(fd)
+      return
+   end
    return msg.cmd,msg
 end
 
@@ -126,21 +152,6 @@ s.resp.sure_agent = function (source,fd,playerid,agent)
    return true
 end
 
-local disconnect = function (fd)
-   local c = conns[fd]
-   if not c then
-      return
-   end
-
-   local playerid = c.playerid
-   if not playerid then
-      return
-   else
-      players[playerid]=nil
-      local reason = "fall down"
-      skynet.call("agentmgr","lua","reqkick",playerid,reason)
-   end
-end
 
 s.resp.kick = function (source,playerid)
    skynet.error("gateway kick:",playerid)
@@ -159,7 +170,7 @@ s.resp.kick = function (source,playerid)
 end
 
 local process_msg = function (fd,id,msgblock)
-   local cmd,msg = msg_unpack(id,msgblock)
+   local cmd,msg = msg_unpack(id,msgblock,fd)
    skynet.error("procesed message: ",cmd," gateway-",144)
    local conn = conns[fd]
    local playerid = conn.playerid
@@ -180,7 +191,14 @@ local recv_loop = function (fd)
    socket.start(fd)
    while true do
       local head = socket.read(fd,8)
-      local len,id,_ =string.unpack(">I4I4",head)
+      local status,len,id,_ =pcall(string.unpack,">I4I4",head)
+
+      if not status then
+         disconnect(fd)
+         socket.close(fd)
+         return
+      end
+
       local recv = socket.read(fd,tonumber(len))
       if recv then
          skynet.error("proto id = "..tostring(id))

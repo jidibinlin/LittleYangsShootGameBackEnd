@@ -76,7 +76,7 @@ s.client.broadcastCtoS = function (msg)
 end
 
 
-s.resp.leave_scene = function ()
+s.client.leave_scene = function ()
    skynet.error("require leave scene")
    if not s.name then
       return

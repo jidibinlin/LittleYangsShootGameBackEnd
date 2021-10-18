@@ -74,6 +74,8 @@ s.resp.enterScene = function (source,players)
 end
 
 s.resp.freeScene = function(source,node,id)
+   sceneNode[node][id].status  = STATUS.WAIT
+   skynet.error("free scene success")
 end
 
 s.init = function()

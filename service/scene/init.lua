@@ -61,7 +61,7 @@ local startGame = function ()
          local frame = 0
 
          while true do
-            if #players <=1 then
+            if playerNum <=1 then
                for playerid, _ in pairs(players) do
                   s.resp.leave(nil,playerid)
                   -- TODO send msg to scenemgr to back this scene
@@ -119,6 +119,7 @@ s.resp.enterScene = function(source,p)
       print(enPlayer.playerid.."enter scene")
       --table.insert(players,foo)
       players[foo.playerid] = foo
+      playerNum = playerNum+1
    end
 
    startGame()
@@ -151,6 +152,8 @@ s.resp.leave = function (source,playerid)
    end
    --local player = players[playerid]
    players[playerid]=nil
+   playerNum = playerNum-1
+   skynet.error(playerid,"leave scene")
    -- TODO return leave msg
    return s.call(serviceConfig.scenemgr.node,"agentmgr","leave_scene",playerid)
 end

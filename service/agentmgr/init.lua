@@ -86,10 +86,12 @@ s.resp.reqkick = function (source,playerid,reason)
    if not mplayer then
       return false
    end
-   if mplayer.status ~= STATUS.GAME then
-      return false
-   end
+   -- if mplayer.status ~= STATUS.GAME then
+   --    return false
+   -- end
 
+
+   s.call(mplayer.node,mplayer.agent,"leave_scene")
    s.call(mplayer.node,mplayer.agent,"kick")
    s.send(mplayer.node,mplayer.agent,"exit")
    s.send(mplayer.node,mplayer.gate,"kick",playerid)
@@ -102,6 +104,7 @@ end
 -- end
 s.resp.leave_scene = function (source,playerid)
    players[playerid].status = STATUS.WAIT
+   skynet.error(playerid,"STATUS set to",players[playerid].status)
    return true
 end
 
