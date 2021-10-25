@@ -39,23 +39,30 @@ s.client.pvp = function ()
 end
 
 s.client.broadcastCtoS = function (msg)
+   if not s.snode and not s.sname then
+      goto continue
+   end
+
    s.send(s.snode,s.sname,"broadcastCtoS",s.id,msg)
+   ::continue::
 end
 
 s.client.leaveScene = function (msg)
    skynet.error("require leave scene")
-   if not s.name then
+
+   if not s.sname or not s.snode then
       return
    end
+
    s.call(s.snode,s.sname,"leave",s.id)
    s.snode = nil
    s.sname = nil
 
-   if not msg.reason then
+   if not msg.reason  or msg.reason == "" then
       msg.reason = "request leave scene success"
+      skynet.error("set the reason")
    end
-   --TODO : return proto
-   return {id = 9,cmd = "respLeaveScene",reason = msg.reason}
+   return {id = 10,cmd = "respLeaveScene",status = true,reason = msg.reason}
 end
 
 s.resp.send = function (source,msg)

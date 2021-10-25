@@ -16,7 +16,7 @@ function traceback(error)
 end
 
 local dispatch = function (session,address,cmd,...)
-   skynet.error("received call",address,cmd)
+   --skynet.error("received call",address,cmd)
    local fun = M.resp[cmd]
    if not fun then
       skynet.error(fun..":"..cmd.." isNULL")

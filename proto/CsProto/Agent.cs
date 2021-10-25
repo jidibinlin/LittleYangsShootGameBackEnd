@@ -43,11 +43,11 @@ namespace Agent {
             "A2NtZBgCIAEoCRIQCghwbGF5ZXJpZBgDIAEoCRIbCgVmcmFtZRgEIAEoCzIM",
             "LmFnZW50LmZyYW1lEgwKBHN0ZXAYBSABKAUiOQoLY3JlYXRlU2NlbmUSCgoC",
             "aWQYASABKAUSCwoDY21kGAIgASgJEhEKCXNjZW5lTmFtZRgDIAEoCSIlCgps",
-            "ZWF2ZVNjZW5lEgoKAmlkGAEgASgFEgsKA2NtZBgCIAEoCSJHCg5yZXNwTGVh",
-            "dmVTY2VuZRIKCgJpZBgBIAEoBRILCgNjbWQYAiABKAkSDAoEc3RhdBgDIAEo",
-            "CBIOCgZyZWFzb24YBCABKAkiHgoDcHZwEgoKAmlkGAEgASgFEgsKA2NtZBgC",
-            "IAEoCSIiCgdzdXJlUHZwEgoKAmlkGAEgASgFEgsKA2NtZBgCIAEoCWIGcHJv",
-            "dG8z"));
+            "ZWF2ZVNjZW5lEgoKAmlkGAEgASgFEgsKA2NtZBgCIAEoCSJJCg5yZXNwTGVh",
+            "dmVTY2VuZRIKCgJpZBgBIAEoBRILCgNjbWQYAiABKAkSDgoGc3RhdHVzGAMg",
+            "ASgIEg4KBnJlYXNvbhgEIAEoCSIeCgNwdnASCgoCaWQYASABKAUSCwoDY21k",
+            "GAIgASgJIiIKB3N1cmVQdnASCgoCaWQYASABKAUSCwoDY21kGAIgASgJYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -64,7 +64,7 @@ namespace Agent {
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.broadcastCtoS), global::Agent.broadcastCtoS.Parser, new[]{ "Id", "Cmd", "Playerid", "Frame", "Step" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.createScene), global::Agent.createScene.Parser, new[]{ "Id", "Cmd", "SceneName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.leaveScene), global::Agent.leaveScene.Parser, new[]{ "Id", "Cmd" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Agent.respLeaveScene), global::Agent.respLeaveScene.Parser, new[]{ "Id", "Cmd", "Stat", "Reason" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Agent.respLeaveScene), global::Agent.respLeaveScene.Parser, new[]{ "Id", "Cmd", "Status", "Reason" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.pvp), global::Agent.pvp.Parser, new[]{ "Id", "Cmd" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Agent.surePvp), global::Agent.surePvp.Parser, new[]{ "Id", "Cmd" }, null, null, null, null)
           }));
@@ -3793,7 +3793,7 @@ namespace Agent {
     public respLeaveScene(respLeaveScene other) : this() {
       id_ = other.id_;
       cmd_ = other.cmd_;
-      stat_ = other.stat_;
+      status_ = other.status_;
       reason_ = other.reason_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3828,15 +3828,15 @@ namespace Agent {
       }
     }
 
-    /// <summary>Field number for the "stat" field.</summary>
-    public const int StatFieldNumber = 3;
-    private bool stat_;
+    /// <summary>Field number for the "status" field.</summary>
+    public const int StatusFieldNumber = 3;
+    private bool status_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Stat {
-      get { return stat_; }
+    public bool Status {
+      get { return status_; }
       set {
-        stat_ = value;
+        status_ = value;
       }
     }
 
@@ -3869,7 +3869,7 @@ namespace Agent {
       }
       if (Id != other.Id) return false;
       if (Cmd != other.Cmd) return false;
-      if (Stat != other.Stat) return false;
+      if (Status != other.Status) return false;
       if (Reason != other.Reason) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3880,7 +3880,7 @@ namespace Agent {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
       if (Cmd.Length != 0) hash ^= Cmd.GetHashCode();
-      if (Stat != false) hash ^= Stat.GetHashCode();
+      if (Status != false) hash ^= Status.GetHashCode();
       if (Reason.Length != 0) hash ^= Reason.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3908,9 +3908,9 @@ namespace Agent {
         output.WriteRawTag(18);
         output.WriteString(Cmd);
       }
-      if (Stat != false) {
+      if (Status != false) {
         output.WriteRawTag(24);
-        output.WriteBool(Stat);
+        output.WriteBool(Status);
       }
       if (Reason.Length != 0) {
         output.WriteRawTag(34);
@@ -3934,9 +3934,9 @@ namespace Agent {
         output.WriteRawTag(18);
         output.WriteString(Cmd);
       }
-      if (Stat != false) {
+      if (Status != false) {
         output.WriteRawTag(24);
-        output.WriteBool(Stat);
+        output.WriteBool(Status);
       }
       if (Reason.Length != 0) {
         output.WriteRawTag(34);
@@ -3958,7 +3958,7 @@ namespace Agent {
       if (Cmd.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Cmd);
       }
-      if (Stat != false) {
+      if (Status != false) {
         size += 1 + 1;
       }
       if (Reason.Length != 0) {
@@ -3982,8 +3982,8 @@ namespace Agent {
       if (other.Cmd.Length != 0) {
         Cmd = other.Cmd;
       }
-      if (other.Stat != false) {
-        Stat = other.Stat;
+      if (other.Status != false) {
+        Status = other.Status;
       }
       if (other.Reason.Length != 0) {
         Reason = other.Reason;
@@ -4012,7 +4012,7 @@ namespace Agent {
             break;
           }
           case 24: {
-            Stat = input.ReadBool();
+            Status = input.ReadBool();
             break;
           }
           case 34: {
@@ -4043,7 +4043,7 @@ namespace Agent {
             break;
           }
           case 24: {
-            Stat = input.ReadBool();
+            Status = input.ReadBool();
             break;
           }
           case 34: {

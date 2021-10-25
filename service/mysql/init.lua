@@ -6,7 +6,7 @@ local idle = {}
 local walk={}
 
 
-local getConn = function ()
+local function getConn ()
    for key, conn in pairs(idle) do
       idle[conn]=nil
       walk[conn]=conn

@@ -85,8 +85,7 @@ local startGame = function ()
             end
             skynet.sleep(waittime)
          end
-   end
-   )
+   end)
 end
 
 s.resp.enterScene = function(source,p)
@@ -133,6 +132,10 @@ s.resp.leave = function (source,playerid)
    playerNum = playerNum-1
    skynet.error(playerid,"leave scene")
    return s.call(serviceConfig.scenemgr.node,"agentmgr","leaveScene",playerid)
+end
+
+s.init = function ()
+
 end
 
 s.start(...)

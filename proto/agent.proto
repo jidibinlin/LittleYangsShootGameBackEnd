@@ -87,6 +87,7 @@ message leaveScene{
 message respLeaveScene{
     int32 id =1;
     string cmd = 2;
+    bool status = 3;
     string reason = 4;
 }
 

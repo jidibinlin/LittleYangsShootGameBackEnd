@@ -25,10 +25,6 @@ STATUS = {
 
 local createScene = function (node)
    local id = nil
-   --local scenes = sceneNode[node]
-   -- if ~sceneNode[node] then
-   --    sceneNode[node]={}
-   -- end
 
    local scenes = sceneNode[node]
 
